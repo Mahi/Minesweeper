@@ -139,3 +139,23 @@ class Minefield:
             self[point] = Cell(VALUE_MINE)
         for point in other_points:
             self[point] = Cell(self.count_mines_around_point(point))
+
+    def reveal_cell_at(self, point: Point, *, recursive: bool=True) -> None:
+        """Attempt to reveal a cell at given ``(x, y)`` coordinates.
+
+        If ``recursive`` is set to ``True``, this will recursively
+        reveal all the surrounding cells  if the cell's value was
+        equal to ``0``.
+
+        Flagged cells cannot be revealed.
+        """
+        cell = self[point]
+        if cell.flagged or cell.visible:
+            return
+        cell.visible = True
+        if cell.value == 0 and recursive:
+            for p in points_around_point(point):
+                try:
+                    self.reveal_cell_at(p)
+                except IndexError:
+                    pass
