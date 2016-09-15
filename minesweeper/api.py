@@ -3,6 +3,17 @@ import typing
 
 Point = typing.NamedTuple('Point', [('x', int), ('y', int)])
 
+
+def points_around_point(point: Point) -> typing.Iterator[Point]:
+    """Iterate through the points surrounding a point."""
+    px, py = point  # Supports normal tuples along Point
+    for x in range(px - 1, px + 2):
+        for y in range(py - 1, py + 2):
+            if x == px and y == py:
+                continue
+            yield Point(x, y)
+
+
 VALUE_MINE = -1  # Used to indicate that a cell is a mine
 
 
@@ -87,27 +98,9 @@ class Minefield:
             for x in range(len(row)):
                 yield Point(x, y)
 
-    def points_around_point(self, point: Point) -> typing.Iterator[Point]:
-        """Iterate through the points surrounding a point.
-
-        Also yields "invalid" points, i.e. points without a matching
-        cell in the minefield. For example, iterating through points
-        around ``Point(0, 0)`` will also yield negative coordinates.
-        """
-        px, py = point  # Supports normal tuples along Point
-        for x in range(px - 1, px + 2):
-            for y in range(py - 1, py + 2):
-                if x == px and y == py:
-                    continue
-                yield Point(x, y)
-
     def cells_around_point(self, point: Point) -> typing.Iterator[Cell]:
-        """Iterate through the cells surrounding a point.
-
-        Unlike :meth:`points_around_point`, this will not yeald any
-        "invalid" values.
-        """
-        for p in self.cells_around_point(point):
+        """Iterate through the cells surrounding a point."""
+        for p in points_around_point(point):
             try:
                 yield self[p]
             except KeyError:
