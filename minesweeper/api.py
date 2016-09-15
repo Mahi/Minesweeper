@@ -67,3 +67,48 @@ class Minefield:
         return '\n'.join(
             ''.join(str(cell) for cell in row)
             for row in self._cells)
+
+    def __getitem__(self, point: Point):
+        x, y = point  # Supports normal tuples along Point
+        if x < 0 or y < 0:
+            raise KeyError('Nonexistent coordinate: {0}'.format(point))
+        try:
+            return self._cells[y][x]
+        except IndexError:
+            raise KeyError('Nonexistent coordinate: {0}'.format(point))
+
+    def __iter__(self) -> typing.Iterator[Cell]:
+        for row in self._cells:
+            yield from row
+
+    def iter_points(self) -> typing.Iterator[Point]:
+        """Iterate through the cells' ``(x, y)`` points."""
+        for y, row in enumerate(self._cells):
+            for x in range(len(row)):
+                yield Point(x, y)
+
+    def points_around_point(self, point: Point) -> typing.Iterator[Point]:
+        """Iterate through the points surrounding a point.
+
+        Also yields "invalid" points, i.e. points without a matching
+        cell in the minefield. For example, iterating through points
+        around ``Point(0, 0)`` will also yield negative coordinates.
+        """
+        px, py = point  # Supports normal tuples along Point
+        for x in range(px - 1, px + 2):
+            for y in range(py - 1, py + 2):
+                if x == px and y == py:
+                    continue
+                yield Point(x, y)
+
+    def cells_around_point(self, point: Point) -> typing.Iterator[Cell]:
+        """Iterate through the cells surrounding a point.
+
+        Unlike :meth:`points_around_point`, this will not yeald any
+        "invalid" values.
+        """
+        for p in self.cells_around_point(point):
+            try:
+                yield self[p]
+            except KeyError:
+                pass
