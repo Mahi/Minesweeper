@@ -2,6 +2,14 @@ import random
 import typing
 
 
+__all__ = (
+    'Point',
+    'VALUE_MINE',
+    'Cell',
+    'Minefield',
+)
+
+
 Point = typing.NamedTuple('Point', [('x', int), ('y', int)])
 
 
