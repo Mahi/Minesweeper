@@ -39,3 +39,31 @@ class Cell:
         if self.value == VALUE_MINE:
             return 'X'
         return str(self.value)
+
+
+class Minefield:
+    """A minefield of cells.
+
+    Mostly a thin wrapper around a two-dimensional list of cells with
+    a few extra methods for manipulating the cells.
+    """
+
+    def __init__(self, size: Point, n_mines: int) -> None:
+        self._cells = [[Cell(0) for _ in range(size.x)] for _ in range(size.y)]
+        self._n_mines = n_mines
+
+    @property
+    def n_mines(self) -> int:
+        return self._n_mines
+
+    def __repr__(self) -> str:
+        return 'Minefield({width}x{height}, n_mines={n_mines}'.format(
+            width=len(self._cells[0]),
+            height=len(self._cells),
+            n_mines=self.n_mines,
+        )
+
+    def __str__(self) -> str:
+        return '\n'.join(
+            ''.join(str(cell) for cell in row)
+            for row in self._cells)
