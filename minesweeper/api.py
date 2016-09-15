@@ -105,3 +105,11 @@ class Minefield:
                 yield self[p]
             except KeyError:
                 pass
+
+    def count_mines_around_point(self, point: Point) -> int:
+        """Get the number of mine cells around a point."""
+        return sum(cell.value == VALUE_MINE for cell in self.cells_around_point(point))
+
+    def count_flags_around_point(self, point: Point) -> int:
+        """Get the number of flagged cells around a point."""
+        return sum(cell.flagged for cell in self.cells_around_point(point))
