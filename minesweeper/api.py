@@ -85,6 +85,10 @@ class Minefield:
             raise IndexError('Minefield doesn\'t support negative coordinates.')
         return self._cells[y][x]
 
+    def __setitem__(self, point: Point, cell: Cell):
+        x, y = point  # Supports normal tuples along Point
+        self._cells[y][x] = cell
+
     def __iter__(self) -> typing.Iterator[Cell]:
         for row in self._cells:
             yield from row
