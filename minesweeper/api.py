@@ -1,3 +1,4 @@
+import random
 import typing
 
 
@@ -114,3 +115,27 @@ class Minefield:
     def count_flags_around_point(self, point: Point) -> int:
         """Get the number of flagged cells around a point."""
         return sum(cell.flagged for cell in self.cells_around_point(point))
+
+    def reset(self) -> None:
+        """Reset the minefield's cells to new ``Cell(0)`` instances."""
+        for point in self.iter_points():
+            self[point] = Cell(0)
+
+    def init_mines(self, *, restricted_points: typing.Set[Point]=set(), reset: bool=True):
+        """Initialize the minefield with :attr:`n_mines` mines.
+
+        Points passed to ``restricted_points`` argument will be
+        guaranteed not to have a mine placed in them.
+        """
+        if reset:
+            self.reset()
+
+        allowed_points = list(set(self.iter_points()) - restricted_points)
+        random.shuffle(allowed_points)
+        mine_points = allowed_points[:self.n_mines]
+        other_points = set(allowed_points[self.n_mines:]) | restricted_points
+
+        for point in mine_points:
+            self[point] = Cell(VALUE_MINE)
+        for point in other_points:
+            self[point] = Cell(self.count_mines_around_point(point))
