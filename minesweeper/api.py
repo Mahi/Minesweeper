@@ -80,13 +80,13 @@ class Minefield:
             ''.join(str(cell) for cell in row)
             for row in self._cells)
 
-    def __getitem__(self, point: Point):
+    def __getitem__(self, point: Point) -> Cell:
         x, y = point  # Supports normal tuples along Point
         if x < 0 or y < 0:
             raise IndexError('Minefield doesn\'t support negative coordinates.')
         return self._cells[y][x]
 
-    def __setitem__(self, point: Point, cell: Cell):
+    def __setitem__(self, point: Point, cell: Cell) -> None:
         x, y = point  # Supports normal tuples along Point
         self._cells[y][x] = cell
 
@@ -121,7 +121,7 @@ class Minefield:
         for point in self.iter_points():
             self[point] = Cell(0)
 
-    def init_mines(self, *, restricted_points: typing.Set[Point]=set(), reset: bool=True):
+    def init_mines(self, *, restricted_points: typing.Set[Point]=set(), reset: bool=True) -> None:
         """Initialize the minefield with :attr:`n_mines` mines.
 
         Points passed to ``restricted_points`` argument will be
