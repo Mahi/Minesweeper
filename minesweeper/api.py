@@ -82,11 +82,8 @@ class Minefield:
     def __getitem__(self, point: Point):
         x, y = point  # Supports normal tuples along Point
         if x < 0 or y < 0:
-            raise KeyError('Nonexistent coordinate: {0}'.format(point))
-        try:
-            return self._cells[y][x]
-        except IndexError:
-            raise KeyError('Nonexistent coordinate: {0}'.format(point))
+            raise IndexError('Minefield doesn\'t support negative coordinates.')
+        return self._cells[y][x]
 
     def __iter__(self) -> typing.Iterator[Cell]:
         for row in self._cells:
