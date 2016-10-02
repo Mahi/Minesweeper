@@ -165,3 +165,7 @@ class Minefield:
                     self.reveal_cell_at(p)
                 except IndexError:
                     pass
+
+    def is_fully_revealed(self) -> bool:
+        """Check if the minefield is fully revealed, i.e. game won."""
+        return all(cell.visible or cell.value == VALUE_MINE for cell in self)
