@@ -101,7 +101,7 @@ class Minefield:
         for p in points_around_point(point):
             try:
                 yield self[p]
-            except KeyError:
+            except IndexError:
                 pass
 
     def count_mines_around_point(self, point: Point) -> int:
