@@ -3,6 +3,14 @@
 import typing
 
 
+class KeyDefaultDict(typing.DefaultDict):
+    """Defaultdict which passes the key to :attr:`default_factory`."""
+
+    def __missing__(self, key: object) -> object:
+        value = self[key] = self.default_factory(key)
+        return value
+
+
 Point = typing.NamedTuple('Point', [('x', int), ('y', int)])
 
 
