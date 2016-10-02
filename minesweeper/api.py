@@ -61,6 +61,7 @@ class Minefield:
     def __init__(self, size: Point, n_mines: int) -> None:
         self._cells = [[Cell(0) for _ in range(size.x)] for _ in range(size.y)]
         self._n_mines = n_mines
+        self._initialized = False
 
     @property
     def n_mines(self) -> int:
@@ -126,6 +127,7 @@ class Minefield:
         """Reset the minefield's cells to new ``Cell(0)`` instances."""
         for point in self.iter_points():
             self[point] = Cell(0)
+        self._initialized = False
 
     def init_mines(self, *, restricted_points: typing.Set[Point]=set(), reset: bool=True) -> None:
         """Initialize the minefield with :attr:`n_mines` mines.
@@ -135,6 +137,7 @@ class Minefield:
         """
         if reset:
             self.reset()
+        self._initialized = True
 
         allowed_points = list(set(self.iter_points()) - restricted_points)
         random.shuffle(allowed_points)
@@ -155,6 +158,8 @@ class Minefield:
 
         Flagged cells cannot be revealed.
         """
+        if not self._initialized:
+            self.init_mines(restricted_points={point}, reset=False)
         cell = self[point]
         if cell.flagged or cell.visible:
             return
