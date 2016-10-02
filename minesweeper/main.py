@@ -106,6 +106,20 @@ class Game(Scene):
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.running = False
+        elif event.type == pygame.MOUSEBUTTONUP:
+            screenw, screenh = self.screen.get_size()
+            cellw, cellh = screenw / self.minefield.width, screenh / self.minefield.height
+            x, y = int(event.pos[0] / cellw), int(event.pos[1] / cellh)
+            cell = self.minefield[x, y]
+            if event.button == MOUSE1:
+                self.minefield.reveal_cell_at(utilities.Point(x, y))
+                if cell.value == api.VALUE_MINE:
+                    self.running = False
+                elif self.minefield.is_fully_revealed():
+                    self.running = False
+            elif event.button == MOUSE2:
+                if not cell.visible:
+                    cell.flagged = not cell.flagged
 def main(win_size, fps):
     pygame.init()
     pygame.display.set_mode(win_size)
