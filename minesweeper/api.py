@@ -64,6 +64,14 @@ class Minefield:
     def n_mines(self) -> int:
         return self._n_mines
 
+    @property
+    def width(self) -> int:
+        return len(self._cells[0])
+
+    @property
+    def height(self) -> int:
+        return len(self._cells)
+
     def __repr__(self) -> str:
         return 'Minefield({width}x{height}, n_mines={n_mines}'.format(
             width=len(self._cells[0]),
