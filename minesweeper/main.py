@@ -63,12 +63,12 @@ class Menu(Scene):
         super().__init__(fps)
         self.options = options
 
-    def _gap_between_options(self):
+    def _vertical_distance_between_options(self):
         height = self.screen.get_size()[1]
         return height // len(self.options)
 
     def draw(self):
-        step = self._gap_between_options()
+        step = self._vertical_distance_between_options()
         offset = (step - self.font.get_height()) // 2
         for i, option in enumerate(self.options):
             pos = (20, i * step + offset)
@@ -79,7 +79,7 @@ class Menu(Scene):
         if event.type == pygame.QUIT:
             self.running = False
         elif event.type == pygame.MOUSEBUTTONUP and event.button == MOUSE1:
-            step = self._gap_between_options()
+            step = self._vertical_distance_between_options()
             option_index = event.pos[1] // step
             self.running = False
             self.options[option_index].game.run()
@@ -92,17 +92,16 @@ class Game(Scene):
         self.minefield = minefield
 
     def draw(self):
-        self.screen.fill(pygame.Color('black'))
-        width, height = self.screen.get_size()
-        dx, dy = width / self.minefield.width, height / self.minefield.height
+        screenw, screenh = self.screen.get_size()
+        cellw, cellh = screenw / self.minefield.width, screenh / self.minefield.height
         for x in range(self.minefield.width):
             for y in range(self.minefield.height):
                 cell = self.minefield[x, y]
                 text = self._render_cache[str(cell)]
-                px, py = x * dx, y * dy
+                px, py = x * cellw, y * cellh
                 self.screen.blit(text, (px, py))
-                pygame.draw.line(self.screen, self.fg_color, (px, 0), (px, height))
-                pygame.draw.line(self.screen, self.fg_color, (0, py), (width, py))
+                pygame.draw.line(self.screen, self.fg_color, (px, 0), (px, screenh))
+                pygame.draw.line(self.screen, self.fg_color, (0, py), (screenw, py))
 
     def handle_event(self, event):
         if event.type == pygame.QUIT:
