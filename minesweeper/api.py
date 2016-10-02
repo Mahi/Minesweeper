@@ -1,3 +1,5 @@
+"""Business logic classes and functions for a minesweeper game."""
+
 import random
 import typing
 
