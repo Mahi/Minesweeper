@@ -3,6 +3,7 @@
 """An implementation of the minesweeper game with pygame."""
 
 import argparse
+import collections
 
 import pygame
 
@@ -49,6 +50,9 @@ class Scene:
             for event in pygame.event.get():
                 self.handle_event(event)
             clock.tick(self.fps)
+
+
+MenuOption = collections.namedtuple('MenuOption', ['text', 'game'])
 def main(win_size, fps):
     pygame.init()
     pygame.display.set_mode(win_size)
