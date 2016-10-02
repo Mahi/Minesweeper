@@ -19,7 +19,7 @@ class Cell:
 
     Each cell has a :attr:`value` attribute which indicates how many
     mines are surrounding the cell in question. A value of
-    ```VALUE_MINE`` (default: ``-1``) can be used to indicate
+    ``VALUE_MINE`` (default: ``-1``) can be used to indicate
     that the cell itself is a mine.
 
     Cells have two other attributes too:
