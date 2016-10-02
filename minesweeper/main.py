@@ -83,6 +83,30 @@ class Menu(Scene):
             option_index = event.pos[1] // step
             self.running = False
             self.options[option_index].game.run()
+
+
+class Game(Scene):
+
+    def __init__(self, fps, minefield):
+        super().__init__(fps)
+        self.minefield = minefield
+
+    def draw(self):
+        self.screen.fill(pygame.Color('black'))
+        width, height = self.screen.get_size()
+        dx, dy = width / self.minefield.width, height / self.minefield.height
+        for x in range(self.minefield.width):
+            for y in range(self.minefield.height):
+                cell = self.minefield[x, y]
+                text = self._render_cache[str(cell)]
+                px, py = x * dx, y * dy
+                self.screen.blit(text, (px, py))
+                pygame.draw.line(self.screen, self.fg_color, (px, 0), (px, height))
+                pygame.draw.line(self.screen, self.fg_color, (0, py), (width, py))
+
+    def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            self.running = False
 def main(win_size, fps):
     pygame.init()
     pygame.display.set_mode(win_size)
