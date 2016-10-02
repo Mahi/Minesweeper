@@ -3,6 +3,13 @@
 import typing
 
 
+__all__ = (
+    'KeyDefaultDict',
+    'Point',
+    'points_around_point',
+)
+
+
 class KeyDefaultDict(typing.DefaultDict):
     """Defaultdict which passes the key to :attr:`default_factory`."""
 
