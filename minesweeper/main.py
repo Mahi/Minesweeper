@@ -120,10 +120,24 @@ class Game(Scene):
             elif event.button == MOUSE2:
                 if not cell.visible:
                     cell.flagged = not cell.flagged
+
+
+def make_menu_option(w, h, mines, fps):
+    field = api.Minefield(utilities.Point(w, h), mines)
+    game = Game(fps, field)
+    return MenuOption('{0}x{1}, {2} mines'.format(w, h, mines), game)
+
+
 def main(win_size, fps):
     pygame.init()
     pygame.display.set_mode(win_size)
     pygame.display.set_caption('Pygame Minesweeper')
+    menu = Menu(fps, [
+        make_menu_option(5, 5, 5, fps),
+        make_menu_option(8, 8, 9, fps),
+        make_menu_option(12, 12, 16, fps),
+    ])
+    menu.run()
     pygame.quit()
 
 if __name__ == '__main__':
