@@ -18,6 +18,8 @@ def parse_args():
     return parser.parse_args()
 
 
+MOUSE1 = 1
+MOUSE2 = 3
 
 
 class Scene:
@@ -53,6 +55,34 @@ class Scene:
 
 
 MenuOption = collections.namedtuple('MenuOption', ['text', 'game'])
+
+
+class Menu(Scene):
+
+    def __init__(self, fps, options):
+        super().__init__(fps)
+        self.options = options
+
+    def _gap_between_options(self):
+        height = self.screen.get_size()[1]
+        return height // len(self.options)
+
+    def draw(self):
+        step = self._gap_between_options()
+        offset = (step - self.font.get_height()) // 2
+        for i, option in enumerate(self.options):
+            pos = (20, i * step + offset)
+            text = self._render_cache[option.text]
+            self.screen.blit(text, pos)
+
+    def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            self.running = False
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == MOUSE1:
+            step = self._gap_between_options()
+            option_index = event.pos[1] // step
+            self.running = False
+            self.options[option_index].game.run()
 def main(win_size, fps):
     pygame.init()
     pygame.display.set_mode(win_size)
