@@ -82,7 +82,9 @@ class Menu(Scene):
         elif event.type == pygame.MOUSEBUTTONUP and event.button == MOUSE1:
             step = self._vertical_distance_between_options()
             option_index = event.pos[1] // step
-            self.options[option_index].game.run()
+            game = self.options[option_index].game
+            game.minefield.reset()
+            game.run()
 
 
 class Game(Scene):
