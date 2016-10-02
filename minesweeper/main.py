@@ -113,10 +113,11 @@ class Game(Scene):
             cell = self.minefield[x, y]
             if event.button == MOUSE1:
                 self.minefield.reveal_cell_at(utilities.Point(x, y))
-                if cell.value == api.VALUE_MINE:
-                    self.running = False
-                elif self.minefield.is_fully_revealed():
-                    self.running = False
+                if cell.visible:
+                    if cell.value == api.VALUE_MINE:
+                        self.running = False
+                    elif self.minefield.is_fully_revealed():
+                        self.running = False
             elif event.button == MOUSE2:
                 if not cell.visible:
                     cell.flagged = not cell.flagged
