@@ -7,13 +7,12 @@ from utilities import Point, points_around_point
 
 
 __all__ = (
-    'VALUE_MINE',
     'Cell',
     'Minefield',
 )
 
 
-VALUE_MINE = -1  # Used to indicate that a cell is a mine
+_VALUE_MINE = -1  # Used to indicate that a cell is a mine
 
 
 class Cell:
@@ -38,6 +37,10 @@ class Cell:
     def value(self) -> int:
         return self._value
 
+    def is_mine(self) -> bool:
+        """Check if the cell is a mine."""
+        return self.value == _VALUE_MINE
+
     def __repr__(self) -> str:
         return 'Cell({self.value}, flagged={self.flagged}, visible={self.visible})'.format(self=self)
 
@@ -46,7 +49,7 @@ class Cell:
             return 'f'
         if not self.visible:
             return ' '
-        if self.value == VALUE_MINE:
+        if self.is_mine():
             return 'X'
         return str(self.value)
 
@@ -117,7 +120,7 @@ class Minefield:
 
     def count_mines_around_point(self, point: Point) -> int:
         """Get the number of mine cells around a point."""
-        return sum(cell.value == VALUE_MINE for cell in self.cells_around_point(point))
+        return sum(cell.is_mine() for cell in self.cells_around_point(point))
 
     def count_flags_around_point(self, point: Point) -> int:
         """Get the number of flagged cells around a point."""
@@ -145,7 +148,7 @@ class Minefield:
         other_points = set(allowed_points[self.n_mines:]) | restricted_points
 
         for point in mine_points:
-            self[point] = Cell(VALUE_MINE)
+            self[point] = Cell(_VALUE_MINE)
         for point in other_points:
             self[point] = Cell(self.count_mines_around_point(point))
 
@@ -173,4 +176,4 @@ class Minefield:
 
     def is_fully_revealed(self) -> bool:
         """Check if the minefield is fully revealed, i.e. game won."""
-        return all(cell.visible or cell.value == VALUE_MINE for cell in self)
+        return all(cell.visible or cell.is_mine() for cell in self)
