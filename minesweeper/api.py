@@ -16,16 +16,17 @@ _VALUE_MINE = -1  # Used to indicate that a cell is a mine
 
 
 class Cell:
-    """An individual cell to place into a minefield.
+    """An individual cell in a minefield.
 
     Each cell has a :attr:`value` attribute which indicates how many
     mines are surrounding the cell in question. A value of
     ``VALUE_MINE`` (default: ``-1``) can be used to indicate
     that the cell itself is a mine.
 
-    Cells have two other attributes too:
-    :attr:`flagged` tells if the cell has been flagged by the user
-    :attr:`visible` tells if the cell has been revealed already
+    Cells also have two other attributes:
+
+     - :attr:`flagged` tells if the cell has been flagged by the user
+     - :attr:`visible` tells if the cell has been revealed already
     """
 
     def __init__(self, value: int, *, flagged: bool=False, visible: bool=False) -> None:
@@ -57,7 +58,7 @@ class Cell:
 class Minefield:
     """A minefield of cells.
 
-    Mostly a thin wrapper around a two-dimensional list of cells with
+    Wrapper around a two-dimensional list of cells with
     a few extra methods for manipulating the cells.
     """
 
@@ -79,16 +80,13 @@ class Minefield:
         return len(self._cells)
 
     def __repr__(self) -> str:
-        return 'Minefield({width}x{height}, n_mines={n_mines}'.format(
-            width=len(self._cells[0]),
-            height=len(self._cells),
-            n_mines=self.n_mines,
-        )
+        return 'Minefield({self.width}x{self.height}, n_mines={self.n_mines}'.format(self=self)
 
     def __str__(self) -> str:
         return '\n'.join(
             ''.join(str(cell) for cell in row)
-            for row in self._cells)
+            for row in self._cells
+        )
 
     def __getitem__(self, point: Point) -> Cell:
         x, y = point  # Supports normal tuples along Point
