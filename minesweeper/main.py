@@ -13,9 +13,12 @@ import utilities
 
 def parse_args():
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('-w', '--width', type=int, help='Width of the game window.')
-    parser.add_argument('-h', '--height', type=int, help='Height of the game window.')
-    parser.add_argument('--fps', type=int, help='Framerate of the game window.')
+    parser.add_argument('-w', '--width', type=int, default=640,
+                        help='Width of the game window.')
+    parser.add_argument('-h', '--height', type=int, default=480,
+                        help='Height of the game window.')
+    parser.add_argument('--fps', type=int, default=30,
+                        help='Framerate of the game window.')
     return parser.parse_args()
 
 
